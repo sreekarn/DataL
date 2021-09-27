@@ -1,0 +1,13 @@
+Fabric
+Flask-SQLAlchemy
+Flask-WTF
+flask-login
+flask-migrate
+WTForms
+coverage
+dataclasses-json
+pandas
+flask-paginate
+# ecdsa
+# paramiko
+# pycrypto

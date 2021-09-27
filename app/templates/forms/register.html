@@ -1,0 +1,143 @@
+{% extends 'layouts/form.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<div class="signup-form">
+  {% if error %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  {% if form.errors %}
+  <div class="alert alert-danger" role="alert">
+    <ul class="errors">
+      {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+          {% for error in field_errors %}
+              <li>{{ form[field_name].label }}: {{ error }}</li>
+          {% endfor %}
+      {% endfor %}
+  </ul>
+  </div>
+    
+{% endif %}
+
+  <form action="/register" method="post">
+    <h2>Register</h2>
+    <p class="hint-text">Create your account. It's free and only takes a minute.</p>
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <div class="form-floating">
+            {{ form.first_name(class_ = 'form-control', placeholder = form.first_name.label.text, required = true,
+          autofocus = true) }}
+            <label>{{form.first_name.label.text}}</label>
+          </div>
+          
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            {{ form.last_name(class_ = 'form-control', placeholder = form.last_name.label.text, required = true,
+          autofocus = true) }}
+            <label>{{form.last_name.label.text}}</label>
+          </div>        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-floating">
+        {{ form.institute_name(class_ = 'form-control', placeholder = form.institute_name.label.text, required = true,
+      autofocus = true) }}
+        <label>{{form.institute_name.label.text}}</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-floating">
+        {{ form.email(class_ = 'form-control', placeholder = form.email.label.text, required = true,
+      autofocus = true) }}
+        <label>{{form.email.label.text}}</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="form-floating">
+        {{ form.specialization(class_ = 'form-control', placeholder = form.specialization.label.text, required = true,
+      autofocus = true) }}
+        <label>{{form.specialization.label.text}}</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <!-- {{ form.resident_doctor(class_ = 'form-control', placeholder = form.resident_doctor.label.text, required = true) }} -->
+    <label class="pe-4 form-label text-dark">{{form.resident_doctor.label.text}}: </label>
+      {% for subfield in form.resident_doctor %}
+      <div class="form-check  form-check-inline">
+        {{subfield(class_ = 'form-check-input')}}
+        <label class="form-check-label" for="flexRadioDefault1" {{"checked" if form.resident_doctor.default==subfield.value}}>
+          {{ subfield.label }}
+        </label>
+      </div>
+{% endfor %}
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <label class="form-label text-dark">Experience: </label>
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            {{ form.experience_years(class_ = 'form-control', placeholder = form.experience_years.label.text, required = true) }}
+            <label>{{form.experience_years.label.text}}</label>
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            {{ form.experience_months(class_ = 'form-control', placeholder = form.experience_months.label.text, required = true) }}
+            <label>{{form.experience_months.label.text}}</label>
+          </div>
+        </div>
+      </div>
+      
+      
+    </div>
+    <div class="form-group">
+      <div class="form-floating">
+        {{ form.user_name(class_ = 'form-control', placeholder = form.user_name.label.text, required = true,
+      autofocus = true) }}
+        <label>{{form.user_name.label.text}}</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="row">
+        <div class="col">
+          <div class="form-floating">
+            {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true,
+          autofocus = true) }}
+            <label>{{form.password.label.text}}</label>
+          </div>
+
+        </div>
+        <div class="col">
+          <div class="form-floating">
+            {{ form.confirm(class_ = 'form-control', placeholder = form.confirm.label.text, required = true,
+          autofocus = true) }}
+            <label>{{form.confirm.label.text}}</label>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+    </div>
+    <div class="form-group">
+      <label class="form-check-label"><input type="checkbox"> I accept the <a href="#">Terms of Use</a> &amp; <a
+          href="#">Privacy Policy</a></label>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-orange btn-lg btn-block">Register Now</button>
+    </div>
+  </form>
+  <div class="text-center">Already have an account? <a href="/login">Sign in</a></div>
+
+</div>
+
+
+
+{% endblock %}

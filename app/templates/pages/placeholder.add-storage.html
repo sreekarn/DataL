@@ -1,0 +1,142 @@
+{% extends 'layouts/form.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="signup-form">
+    <form>
+        <h2>Storage</h2>
+        <p class="hint-text">Use youe Email and Password to login.</p>
+
+        <div class="form-group form-floating">
+            <select class="form-select" id="floatingSelect" aria-label="Select Storage Type">
+              <option value="1" selected>Local Storage</option>
+                <option value="1">Microsoft Azure</option>
+            </select>
+            <label for="floatingSelect">Select Storage Type</label>
+          </div>
+
+       
+
+        <div class="form-group form-floating">
+            <input id="txtLocation" type="text" class="form-control" name="location" placeholder="Absolute Path">
+            <label for="txtLocation">Enter absolute path of your images directory.</label>
+          </div>
+
+          <div class="form-group form-floating">
+            <textarea class="form-control" placeholder="Enter Question" id="txtQuestion" style="height: 100px"></textarea>
+            <label for="txtQuestion">Enter Question</label>
+          </div>
+
+        <div class="form-group">
+            <button id="btnCheckStatus" class="btn btn-success btn-lg btn-block">Check Connection</button>
+            <button id="btnSubmit" class="btn btn-primary btn-lg btn-block">Sync & Save</button>
+        </div>
+
+
+    </form>
+    <div class="alert alert-success d-none" role="alert">
+        Path exists!
+      </div>
+
+      <div class="alert alert-danger d-none" role="alert">
+        This Path does not exist!
+      </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+
+<script>
+    validate = function() {
+        $('.input-error').removeClass('input-error');
+        $('.alert').removeClass('d-none');
+        $('.alert').addClass('d-none');
+        var retVal = true;
+        if ($('#txtLocation').val().trim().length === 0) {
+            $('#txtLocation').addClass('input-error');
+            alert('Enter absolute folder path')
+            retVal = false;
+        }
+        if ($('#txtQuestion').val().trim().length === 0) {
+            $('#txtQuestion').addClass('input-error');
+            alert('Enter Question')
+            retVal = false;
+        }
+        return retVal;
+    }
+    
+    $('#btnSubmit').click(function (e) {
+        e.preventDefault();
+        if (validate()) {
+            $('#btnSubmit').prop('disabled', true);
+            $('#btnSubmit').addClass('loading');
+            var data = {
+                location: $('#txtLocation').val(),
+                question: $('#txtQuestion').val()
+
+            };
+            $.ajax({
+                url: "/add-local-storage",
+
+                type: "POST",
+                crossDomain: true,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(data)
+            })
+                .done(function (response) {
+                    console.log(response);
+                    if(response.status==1){
+                        window.location.href = '/tasks';
+                    } else if(response.status==0){
+                        $('.alert-danger').toggleClass('d-none')
+                    }
+                    $('#btnSubmit').prop('disabled', false);
+                    $('#btnSubmit').removeClass('loading');
+                })
+                .fail(function(error) {
+                    console.log(error);
+                    $('#btnSubmit').prop('disabled', false);
+                    $('#btnSubmit').removeClass('loading');
+                });
+        }
+    });
+
+    $('#btnCheckStatus').click(function (e) {
+        e.preventDefault();
+        if (validate()) {
+            $('#btnCheckStatus').prop('disabled', true);
+            $('#btnCheckStatus').addClass('loading');
+            var data = {
+                location: $('#txtLocation').val(),
+
+            };
+            $.ajax({
+                url: "/check-local-storage",
+                type: "POST",
+                crossDomain: true,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify(data)
+            })
+                .done(function (response) {
+                    console.log(response);
+                    if(response.status==1){
+                        $('.alert-success').toggleClass('d-none')
+                    } else if(response.status==0){
+                        $('.alert-danger').toggleClass('d-none')
+                    }
+                    $('#btnCheckStatus').prop('disabled', false);
+                    $('#btnCheckStatus').removeClass('loading');
+                })
+                .fail(function(error) {
+                    console.log(error);
+                    $('#btnCheckStatus').prop('disabled', false);
+                    $('#btnCheckStatus').removeClass('loading');
+                });
+        }
+    });
+</script>
+
+{% endblock %}

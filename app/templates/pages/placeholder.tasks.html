@@ -1,0 +1,57 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-between">
+      <div class="alert alert-success" role="alert">
+        <strong>{{ tasks|length }}</strong> Images are loaded from <strong>{{project.storage_location}}</strong>. <a data-title="Change Directory?" href="/add-storage" class="change-directory link-danger">Change Directory</a>
+      </div>
+      <div>
+              <a class="btn btn-orange" href="/tasks/label/?task={{project.last_task_id}}">Start Labeling</a>
+
+      </div>
+    </div>
+    
+  <table class="table table-image">
+    <thead>
+      <tr>
+        <th scope="col">No.</th>
+        <th scope="col">Image</th>
+        <th scope="col">Image Name</th>
+        <th scope="col">Label</th>
+        <th scope="col">Labeled By</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr>
+        <th scope="row">{{task.id}}</th>
+        <td class="w-25">
+          <img src="/get-data/{{task.image}}" class="img-fluid img-thumbnail" alt="Sheep">
+        </td>
+        <td>{{task.image }}</td>
+        <td>{{task.label or ''}}</td>
+        <td>{{task.user_name or ''}}</td>
+        <td>{{task.date or ''}}</td>
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {{ pagination.links }} 
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $('a.change-directory').confirm({
+    content: "All data and prgress will be lost. Are you sure to continue?",
+});
+</script>
+{% endblock %}

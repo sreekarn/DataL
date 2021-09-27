@@ -1,0 +1,36 @@
+{% extends 'layouts/form.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<div class="signup-form">
+  {% if error %}
+  <div class="alert alert-danger" role="alert">
+    {{ error }}
+  </div>
+  {% endif %}
+  <form action="/login" method="post">
+    <h2>Login</h2>
+    <p class="hint-text">Use youe Email and Password to login.</p>
+
+    <div class="form-group">
+
+      {{ form.user_name(class_ = 'form-control', placeholder = form.user_name.label.text, required = true, autofocus = true) }}
+    </div>
+    <div class="form-group">
+      {{ form.password(class_ = 'form-control', placeholder = form.password.label.text, required = true) }}
+    </div>
+
+    <div class="form-group">
+      <label class="form-check-label"> <a href="/forgot">Forgot Password?</a></label>
+    </div>
+
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-orange btn-lg btn-block">Login</button>
+    </div>
+  </form>
+  <div class="text-center">Do not have an account? <a href="/register">Register Now</a></div>
+</div>
+
+
+{% endblock %}
